@@ -1,6 +1,9 @@
 import React from 'react'
 
 const TaskListNumbers = ({data}) => {
+    if (!data || !data.taskCounts) {
+        return <div>Loading task stats...</div>; // ← Prevents crash
+    }
     return (
         <div className='flex mt-10 justify-between gap-5 screen'>
             <div className='w-[45%] px-9 py-6 bg-red-400 rounded-xl'>
