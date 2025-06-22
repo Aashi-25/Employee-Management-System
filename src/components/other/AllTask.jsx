@@ -16,8 +16,8 @@ const AllTask = () => {
             </div>
 
             <div id='allTask' className='h-[80%]'>
-                {authData.employees.map(function (elem) {
-                    return <div className='border-2 font-medium border-emerald-500 mb-2 py-2 px-4 flex justify-between rounded'>
+                {authData.employees.map(function (elem , idx) {
+                    return <div key = {idx} className='border-2 font-medium border-emerald-500 mb-2 py-2 px-4 flex justify-between rounded'>
                         <h2 className='w-1/5 text-lg font-medium text-white-600'>{elem.firstName}</h2>
                         <h3 className='w-1/5 text-lg font-medium text-blue-600'>{elem.taskCounts.newTask}</h3>
                         <h5 className='w-1/5 text-lg font-medium text-yellow-400'>{elem.taskCounts.active}</h5>
