@@ -23,10 +23,19 @@ const App = () => {
   },[]);
   
 
-  const handleLogin = (email , password) => {
-    if(email == 'admin@me.com' && password == '123') {
-      setUser('admin');
-      localStorage.setItem("loggedInUser" , JSON.stringify({role : 'admin'}))
+  const handleLogin = (email, password) => {
+    if (email == 'admin@me.com' && password == '123') {
+      const admin = authData.admin.find((a) => a.email === email && a.password === password);
+      if (admin) {
+        setUser('admin');
+        setloggedInUser(admin);
+        localStorage.setItem("loggedInUser", JSON.stringify({
+          role: 'admin',
+          data: admin
+        }))
+      } else {
+        alert("Invalid Admin Credentials")
+      }
 
     } else if(authData ) {
       const employee = authData.employees.find((e) => email == e.email && e.password == password);
@@ -38,14 +47,14 @@ const App = () => {
     } 
     
     else{
-    alert("Invalid Credentials");
+    alert("Invalid employee Credentials");
   }
   }
 
   return (
     <>
     {!user && <Login handleLogin={handleLogin} />}
-    {user === 'admin' && <AdminDashboard />}
+    {user === 'admin' && <AdminDashboard data = {loggedInUser} />}
     {user === 'employee' && <EmployeeDashboard  data = {loggedInUser} />}
     </>
   )
