@@ -21,32 +21,39 @@ const CreateTask = () => {
     const submitHandler = (e) => {
         e.preventDefault();
 
-        const newTask = { taskTitle,taskDescription,taskDate,category, active:false , newTask:true , failed:false ,completed:false };
+        const newTask = { 
+            title: taskTitle, 
+            description: taskDescription, 
+            date: taskDate, 
+            category, 
+            active: false, 
+            newTask: true, 
+            failed: false, 
+            completed: false 
+        };
 
         const data =JSON.parse(localStorage.getItem('employees'));
         console.log(userData.employees);
 
-        // data.forEach(function(elem){
-        //     if(assignTo == elem.firstName) {
-        //         elem.tasks.push(newTask);
-        //         elem.taskCounts.newTask = elem.taskCounts.newTask+1
-        //     }
-        // })
-
+        // Use immutable update to avoid double-adding tasks
         const UpdatedData = data.map((elem) => {
-            if (assignTo == elem.firstName) {
-                if (!elem.tasks) {
-                    elem.tasks = [];
-                }
-                elem.tasks.push(newTask);
-                if (elem.taskCounts) {
-                    elem.taskCounts.newTask = (elem.taskCounts.newTask || 0) + 1;
-                }
+            if (assignTo === elem.firstName) {
+                return {
+                    ...elem,
+                    tasks: [...(elem.tasks || []), newTask],
+                    taskCounts: {
+                        ...elem.taskCounts,
+                        newTask: (elem.taskCounts?.newTask || 0) + 1
+                    }
+                };
             }
             return elem;
-        })
+        });
         
         localStorage.setItem('employees' , JSON.stringify(UpdatedData));
+
+        // Update context state so UI updates
+        setUserData({ employees: UpdatedData, admin: userData.admin });
 
         setTask((prev) => [...prev , newTask]);
 
