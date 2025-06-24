@@ -8,9 +8,11 @@ const AuthProvider = ({children}) => {
     const [userData , setUserData] = useState(null);
 
     useEffect(() => {
-        setLocalStorage()
-      const {employees , admin} = getLocalStorage();
-      setUserData({employees})
+        if (!localStorage.getItem('employees')) {
+            setLocalStorage();
+        }
+        const {employees , admin} = getLocalStorage();
+        setUserData({employees, admin})
     }, [])
     
 

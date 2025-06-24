@@ -7,10 +7,10 @@ import { AuthContext } from './context/AuthProvider';
 import { data } from 'autoprefixer';
 
 const App = () => {
-
+  const [userData, setUserData] = useContext(AuthContext);
   const [user, setUser] = useState(null); //can be admin or employee
   const [loggedInUser, setloggedInUser] = useState(null);
-  const authData = useContext(AuthContext);
+  // const authData = useContext(AuthContext);
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('loggedInUser');
@@ -24,8 +24,13 @@ const App = () => {
   
 
   const handleLogin = (email, password) => {
+        if (!userData) {
+        alert("Data is still loading, please wait...");
+        return;
+    }
+
     if (email == 'admin@me.com' && password == '123') {
-      const admin = authData.admin.find((a) => a.email === email && a.password === password);
+      const admin = userData.admin?.find((a) => a.email === email && a.password === password);
       if (admin) {
         setUser('admin');
         setloggedInUser(admin);
@@ -37,8 +42,8 @@ const App = () => {
         alert("Invalid Admin Credentials")
       }
 
-    } else if(authData ) {
-      const employee = authData.employees.find((e) => email == e.email && e.password == password);
+    } else if(userData ) {
+      const employee = userData.employees?.find((e) => email == e.email && e.password == password);
       if (employee) {
         setUser('employee');
         setloggedInUser(employee); 
